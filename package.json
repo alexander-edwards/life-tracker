@@ -1,12 +1,12 @@
 {
-  "name": "Time",
+  "name": "life-tracker",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "webpack --mode development ./lifetracker/frontend/src/index.js --output-path ./lifetracker/frontend/static/frontend",
-    "build": "webpack --mode production ./liferacker/frontend/src/index.js --output-path ./lifetracker/frontend/static/frontend",
-    "watch": "webpack --watch --mode development ./lifetracker/frontend/src/index.js --output-path ./lifetracker/frontend/static/frontend"
+    "dev": "webpack --mode development ./lifetracker/frontend/src/index.js --output-path ./lifetracker/frontend/static/frontend2",
+    "build": "webpack --mode production ./liferacker/frontend/src/index.js --output-path ./lifetracker/frontend/static/frontend2",
+    "watch": "webpack --watch --mode development ./lifetracker/frontend/src/index.js --output-path ./lifetracker/frontend/static/frontend2"
   },
   "keywords": [],
   "author": "",

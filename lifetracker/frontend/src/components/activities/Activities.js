@@ -5,7 +5,9 @@ import { getActivities, deleteActivity } from '../../actions/activities'
 export class Activities extends Component {
 
     static propTypes = {
-        activities: PropTypes.array.isRequired
+        activities: PropTypes.array.isRequired,
+        getActivities: PropTypes.func.isRequired,
+        deleteActivity: PropTypes.func.isRequired
     }
 
     componentDidMount() {
@@ -13,6 +15,7 @@ export class Activities extends Component {
     }
 
     handleClick() {
+        console.log('clicked');
         alert("hello world");
     }
 
@@ -21,14 +24,14 @@ export class Activities extends Component {
         return (
             <Fragment>
 
-                <h2>Previously completed...</h2>
+                <h2>Previously completed</h2>
                 <table className="table table-striped">
                     <thead>
                         <tr>
                             <th>Activity</th>
                             <th>Duration</th>
                             <th>Begin Time</th>
-                            <th>End Time</th>
+                            <th>End Times</th>
                             <th />
                         </tr>
                     </thead>
@@ -40,11 +43,13 @@ export class Activities extends Component {
                                 <td>{activity.begin_time}</td>
                                 <td>{activity.end_time}</td>
                                 <td>
+
                                     <button
-                                        onClick={this.handleClick /* this.props.deleteActivity.bind(this, activity.id) */}
+                                        onClick={this.props.deleteActivity.bind(this, activity.id)}
                                         className="btn btn-danger btn-sm">
                                         Delete
                                         </button>
+
                                 </td>
                             </tr>
                         ))}
