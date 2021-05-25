@@ -30,7 +30,7 @@ export class AddActivity extends Component {
         return (
 
             <div className="card card-body mt-4 mb-4">
-                <h2> Start activity</h2>
+                <h2> Completed activity</h2>
                 <form onSubmit={this.onSubmit}>
                     <div className="form-group mb-2">
                         <label>Activity</label>

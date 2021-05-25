@@ -1,7 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { getActivities, deleteActivity } from '../../actions/activities'
+import { getActivities, deleteActivity, getUserProfile } from '../../actions/activities'
+import { GitView } from './GitView';
+
+import BeginTimer from './BeginTimer';
+
+
 export class Activities extends Component {
 
     static propTypes = {
@@ -12,17 +17,18 @@ export class Activities extends Component {
 
     componentDidMount() {
         this.props.getActivities();
-    }
-
-    handleClick() {
-        console.log('clicked');
-        alert("hello world");
+        this.props.getUserProfile();
     }
 
 
     render() {
         return (
             <Fragment>
+
+                <BeginTimer user={this.props.user} />
+
+                <GitView activities={this.props.activities} user={this.props.user} />
+
 
                 <h2>Previously completed</h2>
                 <table className="table table-striped">
@@ -61,10 +67,14 @@ export class Activities extends Component {
     }
 }
 
+function mapStateToProps(state) {
+    var newUser = { activityTypes: [{ value: 'default', name: 'No options' }] }
+    if (state.activities.user.activityTypes) newUser = state.activities.user;
+    return {
+        activities: state.activities.activities,
+        user: newUser
+    };
+}
 
 
-const mapStateToProps = state => ({
-    activities: state.activities.activities
-})
-
-export default connect(mapStateToProps, { getActivities, deleteActivity })(Activities);
+export default connect(mapStateToProps, { getActivities, deleteActivity, getUserProfile })(Activities);

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { GET_ACTIVITIES, DELETE_ACTIVITY, ADD_ACTIVITY } from './types';
+import { GET_ACTIVITIES, DELETE_ACTIVITY, ADD_ACTIVITY, GET_USER } from './types';
 
 // GET ACTIVITIES 
 export const getActivities = () => dispatch => {
@@ -40,4 +40,19 @@ export const addActivity = (activity) => dispatch => {
             });
         })
         .catch(err => console.log(err));
+}
+
+// GET USER 
+export const getUserProfile = () => dispatch => {
+    console.log('getting user profile');
+    var user = {
+        activityTypes: [
+            { value: 'guitar', name: 'Guitar' },
+            { value: 'life tracker', name: 'Life tracker' },
+            { value: 'chess', name: 'Chess' }]
+    };
+    dispatch({
+        type: GET_USER,
+        payload: user
+    });
 }

@@ -13,21 +13,15 @@ class App extends Component {
     render() {
         return (
             <Provider store={store}>
-                <Fragment>
-                    <Header />
-                    <div className="container">
-                        <BeginTimer />
-                    </div>
+                <Header />
 
-                    <div className="container">
-                        <AddActivity />
-                    </div>
+                <div className="container">
+                    <Activities />
+                </div>
 
-                    <div className="container">
-                        <Activities />
-                    </div>
-
-                </Fragment>
+                <div className="container">
+                    <AddActivity />
+                </div>
             </Provider>
         )
     }

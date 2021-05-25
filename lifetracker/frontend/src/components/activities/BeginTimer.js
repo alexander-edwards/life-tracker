@@ -1,9 +1,14 @@
 import React, { Component, Row } from 'react'
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { addActivity } from '../../actions/activities';
+import { addActivity, getUserProfile } from '../../actions/activities';
 
 export class BeginTimer extends Component {
+
+    static propTypes = {
+        user: PropTypes.object.isRequired,
+        getUserProfile: PropTypes.func.isRequired,
+    }
 
     constructor(props) {
         super(props);
@@ -15,9 +20,10 @@ export class BeginTimer extends Component {
             begin_time_obj: '',
             end_time_obj: '',
             interval: '',
-            seconds: parseInt(props.startTimeInSeconds, 10) || 0
+            seconds: parseInt(props.startTimeInSeconds, 10) || 0,
         };
     }
+
 
     tick() {
         this.setState(state => ({
@@ -86,50 +92,67 @@ export class BeginTimer extends Component {
 
 
     onChange = e => {
-        console.log(e.target.name);
-
-        this.setState({ [e.target.name]: [e.target.value] });
+        console.log(e.target.value);
+        this.setState({ [e.target.name]: [e.target.value] }, function () {
+            console.log(this.state);
+        });
     }
 
-
     render() {
+
         const { activity } = this.state;
+        const spanStyle = { padding: "20px", paddingTop: "20px" };
         return (
 
 
-            <div className="card card-body mt-4 mb-4">
+            <div className="card card-body mt-4 mb-4" >
                 <h2> Track activity</h2>
-                <form class="form-inline" onSubmit={this.onSubmit}>
-                    <div className="form-group mb-2">
-                        <label>Activity</label>
-                        <input
-                            className="form-control"
-                            type="text"
-                            name="activity"
+                <form id='begin-form' className="form-inline" onSubmit={this.onSubmit}>
+
+                    <span >
+
+                        <select
+                            style={{ width: 300, height: 30 }}
                             onChange={this.onChange}
-                            value={activity}
-                        />
-                    </div>
-                    <div>
+                            name='activity'
+                            value={activity}>
+
+                            {this.props.user.activityTypes.map((e, key) => {
+                                return <option key={key} value={e.value}>{e.name}</option>;
+                            })}
+
+                        </select>
+                    </span>
+
+                    <span style={spanStyle} >
                         Timer: {this.formatTime(this.state.seconds)}
-                    </div>
-                    <div className="form-group mb-2">
-                        <button onClick={this.start} type="start" className="btn btn-primary">
+                    </span>
+
+                    <span style={spanStyle}>
+                        <button onClick={this.start} type="start" className="btn btn-primary" >
                             Start
                         </button>
-                    </div>
+                    </span>
 
-                    <div className="form-group mb-2">
+                    <span style={spanStyle}>
                         <button onClick={this.end} type="end" className="btn btn-primary">
                             End
                         </button>
-                    </div>
+                    </span>
+
+
                 </form>
 
-            </div>
+            </div >
 
         )
     }
 }
 
-export default connect(null, { addActivity })(BeginTimer);
+function mapStateToProps(state) {
+    var newUser = { activityTypes: [{ value: 'default', name: 'No options' }] }
+    if (state.activities.user.activityTypes) newUser = state.activities.user;
+    return { user: newUser };
+}
+
+export default connect(mapStateToProps, { addActivity, getUserProfile })(BeginTimer);
