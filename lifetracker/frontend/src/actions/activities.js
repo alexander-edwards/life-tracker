@@ -47,10 +47,13 @@ export const getUserProfile = () => dispatch => {
     console.log('getting user profile');
     var user = {
         activityTypes: [
-            { value: 'guitar', name: 'Guitar' },
-            { value: 'life tracker', name: 'Life tracker' },
-            { value: 'chess', name: 'Chess' }]
+            { value: 'Guitar', name: 'Guitar', color: '#2A7F62' },
+            { value: 'Life tracker', name: 'Life tracker', color: '#F3DE8A' },
+            { value: 'Chess', name: 'Chess', color: '#EB9486' }]
     };
+    var colorScheme = {}
+    for (var i = 0; i < user.activityTypes.length; i++) colorScheme[user.activityTypes[i].value] = user.activityTypes[i].color;
+    user.colorScheme = colorScheme;
     dispatch({
         type: GET_USER,
         payload: user

@@ -26,8 +26,11 @@ export class BeginTimer extends Component {
 
 
     tick() {
+        var current = new Date();
+        var secsElapsed = Math.floor((current - this.state.begin_time_obj) / 1000);
+        console.log(secsElapsed);
         this.setState(state => ({
-            seconds: state.seconds + 1
+            seconds: secsElapsed
         }));
     }
 
@@ -68,7 +71,6 @@ export class BeginTimer extends Component {
 
         // End timer 
         var current = new Date();
-        console.log(this.state.seconds);
         this.setState({ duration_mins: this.state.seconds, end_time: current.toLocaleString() });
 
 
@@ -76,7 +78,7 @@ export class BeginTimer extends Component {
         const { activity, duration_mins } = this.state;
         const activity_obj = {
             'activity': activity,
-            'duration_mins': this.state.seconds,
+            'duration_mins': Math.floor(this.state.seconds / 60),
             "end_time": current.toISOString().slice(0, 19).replace('T', ' '),
             "begin_time": this.state.begin_time
         };
@@ -102,6 +104,7 @@ export class BeginTimer extends Component {
 
         const { activity } = this.state;
         const spanStyle = { padding: "20px", paddingTop: "20px" };
+        console.log('color scheme', this.props.user.colorScheme)
         return (
 
 
@@ -116,9 +119,12 @@ export class BeginTimer extends Component {
                             onChange={this.onChange}
                             name='activity'
                             value={activity}>
+                            <option select="selected">
+                                Select Option
+                        </option>
 
                             {this.props.user.activityTypes.map((e, key) => {
-                                return <option key={key} value={e.value}>{e.name}</option>;
+                                return <option key={key} value={e.value} style={{ backgroundColor: this.props.user.colorScheme[e.value] ? this.props.user.colorScheme[e.value] : 'red' }}>{e.name}</option>;
                             })}
 
                         </select>
@@ -150,7 +156,7 @@ export class BeginTimer extends Component {
 }
 
 function mapStateToProps(state) {
-    var newUser = { activityTypes: [{ value: 'default', name: 'No options' }] }
+    var newUser = { activityTypes: [{ value: 'default', name: 'No options' }], colorScheme: [] }
     if (state.activities.user.activityTypes) newUser = state.activities.user;
     return { user: newUser };
 }

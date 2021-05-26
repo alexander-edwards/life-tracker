@@ -11,13 +11,15 @@ export class Activities extends Component {
 
     static propTypes = {
         activities: PropTypes.array.isRequired,
+        user: PropTypes.object.isRequired,
         getActivities: PropTypes.func.isRequired,
         deleteActivity: PropTypes.func.isRequired
     }
 
     componentDidMount() {
-        this.props.getActivities();
+
         this.props.getUserProfile();
+        this.props.getActivities();
     }
 
 
@@ -35,19 +37,17 @@ export class Activities extends Component {
                     <thead>
                         <tr>
                             <th>Activity</th>
-                            <th>Duration</th>
-                            <th>Begin Time</th>
-                            <th>End Times</th>
+                            <th>Duration (minutes)</th>
+                            <th>Date</th>
                             <th />
                         </tr>
                     </thead>
                     <tbody>
                         {this.props.activities.map(activity => (
-                            <tr key={activity.id}>
+                            <tr key={activity.id} style={{ backgroundColor: this.props.user.colorScheme[activity.activity] }}>
                                 <td>{activity.activity}</td>
                                 <td>{activity.duration_mins}</td>
-                                <td>{activity.begin_time}</td>
-                                <td>{activity.end_time}</td>
+                                <td>{activity.begin_time ? activity.begin_time.slice(0, 10) : activity.begin_time}</td>
                                 <td>
 
                                     <button
