@@ -30,8 +30,6 @@ export class GitView extends Component {
 
     createTable() {
 
-        console.log('working with', this.props.activities);
-
         var numDays = 30;
         var didActivityOnDate = {}
 
@@ -57,6 +55,10 @@ export class GitView extends Component {
         if (!table) {
             table = document.createElement('table');
             table.setAttribute("id", "git table");
+
+            var tableLabel = document.createTextNode('In the past ' + numDays + ' days:')
+            document.getElementById('git table label place').appendChild(tableLabel);
+
         }
 
         // Delete old rows if there
@@ -89,12 +91,7 @@ export class GitView extends Component {
             table.appendChild(tr);
         }
 
-        var gitPlace = document.getElementById('git table label place')
-        var tableLabel = document.createTextNode('In the past ' + numDays + ' days:')
-        gitPlace.appendChild(tableLabel);
-        var gitPlace = document.getElementById('git table place')
-        gitPlace.appendChild(table);
-
+        document.getElementById('git table place').appendChild(table);
 
     }
 
@@ -111,7 +108,7 @@ export class GitView extends Component {
         const spanStyle = { padding: "20px", paddingTop: "20px" };
         return (
 
-            <div className="card card-body mt-4 mb-4" >
+            <div className="mt-4 mb-4" >
                 <h2> Git View</h2>
                 <div id="git table label place"></div>
 

@@ -103,48 +103,52 @@ export class BeginTimer extends Component {
     render() {
 
         const { activity } = this.state;
-        const spanStyle = { padding: "20px", paddingTop: "20px" };
+        const spanStyle = { padding: "20px", };
         console.log('color scheme', this.props.user.colorScheme)
         return (
 
-
-            <div className="card card-body mt-4 mb-4" >
-                <h2> Track activity</h2>
+            <div className="mt-4 mb-4" >
+                <h4> Begin activity</h4>
                 <form id='begin-form' className="form-inline" onSubmit={this.onSubmit}>
 
-                    <span >
 
+                    <div className="form-group mb-2">
+                        <label>Start your activity</label>
                         <select
-                            style={{ width: 300, height: 30 }}
+                            className="form-control"
+                            //style={{ width: 500, height: 50 }}
                             onChange={this.onChange}
                             name='activity'
                             value={activity}>
                             <option select="selected">
                                 Select Option
-                        </option>
+                            </option>
 
-                            {this.props.user.activityTypes.map((e, key) => {
-                                return <option key={key} value={e.value} style={{ backgroundColor: this.props.user.colorScheme[e.value] ? this.props.user.colorScheme[e.value] : 'red' }}>{e.name}</option>;
+                            {Array.from(this.props.user.activityTypes).map((e, key) => {
+                                return <option key={key} value={e.value} style={{ "backgroundColor": 'color:red' }}>{e.name}</option>;
                             })}
 
                         </select>
-                    </span>
+                    </div>
 
-                    <span style={spanStyle} >
-                        Timer: {this.formatTime(this.state.seconds)}
-                    </span>
+                    <div className="form-group mb-2" style={{ "paddingTop": "25px", "paddingLeft": "5px" }}>
 
-                    <span style={spanStyle}>
+
+                        <h4>Timer: {this.formatTime(this.state.seconds)}</h4>
+                    </div>
+
+
+                    <div className="form-group mb-2" style={{ "paddingTop": "5px", "paddingLeft": "5px" }}>
+
+
                         <button onClick={this.start} type="start" className="btn btn-primary" >
                             Start
                         </button>
-                    </span>
 
-                    <span style={spanStyle}>
-                        <button onClick={this.end} type="end" className="btn btn-primary">
+                        <button onClick={this.end} type="end" className="btn btn-primary" style={{ 'marginLeft': "10px" }}>
                             End
                         </button>
-                    </span>
+                    </div>
 
 
                 </form>
