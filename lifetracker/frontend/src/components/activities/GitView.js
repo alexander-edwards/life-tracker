@@ -28,6 +28,10 @@ export class GitView extends Component {
         this.createTable();
     }
 
+    displayNotes() {
+        alert('hovering over');
+    }
+
     createTable() {
 
         var numDays = 30;

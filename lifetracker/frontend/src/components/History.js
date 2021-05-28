@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import ReactDOM from 'react-dom';
 
 import Header from './layout/Header';
-import Activities from './activities/Activities';
+import History from './activities/History';
 
 import { Provider } from 'react-redux';
 import store from '../store';
@@ -13,7 +13,7 @@ class App extends Component {
             <Provider store={store}>
                 <Header />
                 <div className="container">
-                    <Activities />
+                    <History />
                 </div>
 
             </Provider>

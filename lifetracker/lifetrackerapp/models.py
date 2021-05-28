@@ -9,6 +9,7 @@ class ActivityInstance(models.Model):
     begin_time = models.DateTimeField(null=True, blank=True)
     end_time = models.DateTimeField(null=True, blank=True)
     duration_mins = models.IntegerField()
+    notes = models.CharField(max_length=1000, null=True, blank=True)
 
 
 class UserInstance(models.Model):

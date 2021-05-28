@@ -17,6 +17,7 @@ export class BeginTimer extends Component {
             begin_time: '',
             end_time: '',
             duration_mins: '',
+            notes: '',
             begin_time_obj: '',
             end_time_obj: '',
             interval: '',
@@ -28,7 +29,6 @@ export class BeginTimer extends Component {
     tick() {
         var current = new Date();
         var secsElapsed = Math.floor((current - this.state.begin_time_obj) / 1000);
-        console.log(secsElapsed);
         this.setState(state => ({
             seconds: secsElapsed
         }));
@@ -75,14 +75,15 @@ export class BeginTimer extends Component {
 
 
         // Add activity
-        const { activity, duration_mins } = this.state;
+        const { activity } = this.state;
         const activity_obj = {
             'activity': activity,
             'duration_mins': Math.floor(this.state.seconds / 60),
             "end_time": current.toISOString().slice(0, 19).replace('T', ' '),
-            "begin_time": this.state.begin_time
+            "begin_time": this.state.begin_time,
+            "notes": this.state.notes[0]
         };
-        console.log(activity_obj);
+        console.log('activity', activity_obj);
         this.props.addActivity(activity_obj);
 
 
@@ -94,15 +95,12 @@ export class BeginTimer extends Component {
 
 
     onChange = e => {
-        console.log(e.target.value);
-        this.setState({ [e.target.name]: [e.target.value] }, function () {
-            console.log(this.state);
-        });
+        this.setState({ [e.target.name]: [e.target.value] });
     }
 
     render() {
 
-        const { activity } = this.state;
+        const { activity, notes } = this.state;
         const spanStyle = { padding: "20px", };
         console.log('color scheme', this.props.user.colorScheme)
         return (
@@ -129,6 +127,16 @@ export class BeginTimer extends Component {
                             })}
 
                         </select>
+                    </div>
+
+                    <div className="form-group mb-2">
+                        <label>Notes</label>
+                        <input
+                            className="form-control"
+                            type="text"
+                            name="notes"
+                            onChange={this.onChange}
+                            value={notes} />
                     </div>
 
                     <div className="form-group mb-2" style={{ "paddingTop": "25px", "paddingLeft": "5px" }}>

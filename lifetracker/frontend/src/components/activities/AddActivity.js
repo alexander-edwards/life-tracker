@@ -11,6 +11,7 @@ export class AddActivity extends Component {
         begin_time: '',
         end_time: '',
         duration_mins: '',
+        notes: ''
     }
 
     static propTypes = {
@@ -30,7 +31,7 @@ export class AddActivity extends Component {
 
         e.preventDefault();
 
-        const { activity, duration_mins } = this.state;
+        const { activity, duration_mins, notes } = this.state;
 
         var current = new Date();
         console.log('current time', current);
@@ -39,6 +40,7 @@ export class AddActivity extends Component {
             'activity': activity[0],
             'duration_mins': duration_mins[0],
             'begin_time': formatTime(current),
+            'notes': notes[0]
         };
 
         console.log('avtivity is', activity_obj);
@@ -65,15 +67,17 @@ export class AddActivity extends Component {
             });
         }
 
+        document.getElementById("add-activity-form").reset();
+
     }
 
     render() {
-        const { activity, duration_mins } = this.state;
+        const { activity, duration_mins, notes } = this.state;
         return (
 
             <div className="mt-4 mb-4">
                 <h4> Log activity</h4>
-                <form onSubmit={this.onSubmit}>
+                <form id="add-activity-form" onSubmit={this.onSubmit}>
                     <div className="form-group mb-2">
                         <label>Activity</label>
                         <input
@@ -83,6 +87,16 @@ export class AddActivity extends Component {
                             onChange={this.onChange}
                             value={activity}
                         />
+                    </div>
+
+                    <div className="form-group mb-2">
+                        <label>Notes</label>
+                        <input
+                            className="form-control"
+                            type="text"
+                            name="notes"
+                            onChange={this.onChange}
+                            value={notes} />
                     </div>
 
                     <div className="form-group mb-2">

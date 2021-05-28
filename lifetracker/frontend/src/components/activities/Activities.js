@@ -37,6 +37,10 @@ export class Activities extends Component {
 
     }
 
+    displayNotes() {
+        alert('mouse over');
+    }
+
     createTable() {
 
         if (this.props.user.activityTypes.length == 1) return;
@@ -84,6 +88,8 @@ export class Activities extends Component {
 
             for (var i = 0; i < activitiesByDate[date].length; i++) {
 
+                var dayTdDiv = document.createElement('div');
+
                 var dayTr = document.createElement('tr')
 
                 dayTr.style.backgroundColor = this.props.user.colorScheme[activitiesByDate[date][i].activity];
@@ -91,14 +97,25 @@ export class Activities extends Component {
                 var duration = document.createTextNode(activitiesByDate[date][i].duration_mins);
                 var dayTd1 = document.createElement('td');
                 var dayTd2 = document.createElement('td');
-                dayTd1.append(activityType);
+
+
+                // <div id="parent"> <!-- This is the main container, to mouse over -->
+                // <div id="popup" style="display: none">description text here</div>
+
+                dayTdDiv.append(activityType);
                 dayTd2.append(duration);
+
                 dayTd1.style.padding = '10px';
                 dayTd2.style.padding = '10px';
-                dayTr.append(dayTd1);
-                dayTr.append(dayTd2);
+
                 dayTd1.style.borderRadius = '0.5em';
                 dayTd2.style.borderRadius = '0.5em';
+
+                dayTdDiv.onmouseover = this.displayNotes;
+                dayTd1.appendChild(dayTdDiv);
+
+                dayTr.append(dayTd1);
+                dayTr.append(dayTd2);
 
                 dayTable.append(dayTr)
             }
