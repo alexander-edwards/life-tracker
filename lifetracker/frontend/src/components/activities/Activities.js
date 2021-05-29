@@ -37,8 +37,18 @@ export class Activities extends Component {
 
     }
 
-    displayNotes() {
-        alert('mouse over');
+    displayNotes(notes) {
+        return function () {
+            var notesDiv = document.getElementById(notes);
+            notesDiv.style.visibility = 'visible';
+        };
+    }
+
+    hideNotes(notes) {
+        return function () {
+            var notesDiv = document.getElementById(notes);
+            notesDiv.style.visibility = 'hidden';
+        };
     }
 
     createTable() {
@@ -88,6 +98,8 @@ export class Activities extends Component {
 
             for (var i = 0; i < activitiesByDate[date].length; i++) {
 
+                index += 1;
+
                 var dayTdDiv = document.createElement('div');
 
                 var dayTr = document.createElement('tr')
@@ -105,13 +117,41 @@ export class Activities extends Component {
                 dayTdDiv.append(activityType);
                 dayTd2.append(duration);
 
+                var notesDiv = document.createElement('div')
+
+                // Show notes
+                if (activitiesByDate[date][i].notes && activitiesByDate[date][i].notes != ' ') {
+
+                    var notesText = document.createElement('span');
+                    notesText.style.fontSize = '70%';
+                    notesText.appendChild(document.createTextNode(activitiesByDate[date][i].notes));
+                    notesDiv.appendChild(notesText);
+
+                    notesDiv.id = 'notes div ' + index;
+                    notesDiv.style.backgroundColor = "#D3D3D3"; // Transparent
+                    notesDiv.style.position = "absolute";
+                    notesDiv.style.zIndex = '2';
+                    notesDiv.style.visibility = 'hidden';
+                    notesDiv.style.borderRadius = '0.5em';
+                    notesDiv.style.padding = '1px';
+                    notesDiv.style.paddingLeft = '8px';
+                    notesDiv.style.paddingRight = '8px';
+                    notesDiv.style.marginLeft = '50px';
+                    notesDiv.style.marginTop = '-10px';
+
+                    dayTdDiv.onmouseover = this.displayNotes(notesDiv.id);
+                    dayTdDiv.onmouseout = this.hideNotes(notesDiv.id);
+
+                    dayTdDiv.appendChild(notesDiv);
+                }
+
+
                 dayTd1.style.padding = '10px';
                 dayTd2.style.padding = '10px';
 
                 dayTd1.style.borderRadius = '0.5em';
                 dayTd2.style.borderRadius = '0.5em';
 
-                dayTdDiv.onmouseover = this.displayNotes;
                 dayTd1.appendChild(dayTdDiv);
 
                 dayTr.append(dayTd1);
@@ -121,6 +161,7 @@ export class Activities extends Component {
             }
 
             if (activitiesByDate[date].length == 0) {
+
                 var dayTr = document.createElement('tr')
                 dayTr.style.backgroundColor = '#D3D3D3';
                 var activityType = document.createTextNode('No activity');
@@ -135,6 +176,7 @@ export class Activities extends Component {
                 dayTr.append(dayTd2);
                 dayTd1.style.borderRadius = '0.5em';
                 dayTd2.style.borderRadius = '0.5em';
+
 
                 dayTable.append(dayTr)
             }
@@ -172,7 +214,7 @@ export class Activities extends Component {
                             </div>
                         </td>
                         <td>
-                            <div style={{ "width": '100px' }}></div>
+                            <div style={{ "width": '250px' }}></div>
                         </td>
                         <td>
                             <div style={{ "width": '500px' }}>
@@ -191,36 +233,6 @@ export class Activities extends Component {
                 <GitView activities={this.props.activities} user={this.props.user} />
 
                 <hr></hr>
-
-                {/* <table className="table">
-                    <thead>
-                        <tr>
-                            <th>Activity</th>
-                            <th>Duration (minutes)</th>
-                            <th>Date</th>
-                            <th />
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {this.props.activities.map(activity => (
-                            <tr key={activity.id} style={{ backgroundColor: this.props.user.colorScheme ? this.props.user.colorScheme[activity.activity] : "white" }}>
-                                <td>{activity.activity}</td>
-                                <td>{activity.duration_mins}</td>
-                                <td>{activity.begin_time ? activity.begin_time.slice(0, 10) : activity.begin_time}</td>
-                                <td>
-
-                                    <button
-                                        onClick={this.props.deleteActivity.bind(this, activity.id)}
-                                        className="btn btn-danger btn-sm">
-                                        Delete
-                                        </button>
-
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table> */}
-
 
             </Fragment >
         )

@@ -14,6 +14,7 @@ export class GitView extends Component {
         super(props);
         this.state = {
             activitySelected: this.props.user.activityTypes[1],
+            hasPreviouslyRendered: false
         };
 
     }
@@ -35,88 +36,92 @@ export class GitView extends Component {
     createTable() {
 
         var numDays = 30;
-        var didActivityOnDate = {}
 
-        var today = new Date();
-        for (var i = 0; i < numDays; i++) {
-            var previously = new Date();
-            previously.setDate(today.getDate() - i);
-            didActivityOnDate[previously.toISOString().slice(0, 10)] = 0;
-        }
+        document.getElementById('git table place').innerHTML = "";
+        document.getElementById('git table label place').innerHTML = "";
 
-        // Get an array of whether you did the activity on a specific date
-        var filteredActivities = this.props.activities.filter(activity => activity.activity == this.state.activitySelected)
-        for (var i = 0; i < filteredActivities.length; i++) {
-            var dateDone = filteredActivities[i].begin_time.slice(0, 10);
-            if (dateDone in didActivityOnDate) didActivityOnDate[dateDone] += 1;
-        }
-        var keys = Object.keys(didActivityOnDate);
-        var didActivity = keys.map(function (v) { return didActivityOnDate[v]; }).reverse();
-        console.log(didActivity)
+        var tableLabel = document.createTextNode('In the past ' + numDays + ' days:')
+        document.getElementById('git table label place').appendChild(tableLabel);
 
-        // Create the table if it is not already there
-        var table = document.getElementById('git table')
-        if (!table) {
-            table = document.createElement('table');
+        for (var activityIndex = 0; activityIndex < this.props.user.activityTypes.length; activityIndex++) {
+
+            var didActivityOnDate = {}
+
+            var today = new Date();
+            for (var i = 0; i < numDays; i++) {
+                var previously = new Date();
+                previously.setDate(today.getDate() - i);
+                didActivityOnDate[previously.toISOString().slice(0, 10)] = 0;
+            }
+
+            // Get an array of whether you did the activity on a specific date
+            var filteredActivities = this.props.activities.filter(activity => activity.activity == this.props.user.activityTypes[activityIndex].name)
+            for (var i = 0; i < filteredActivities.length; i++) {
+                var dateDone = filteredActivities[i].begin_time.slice(0, 10);
+                if (dateDone in didActivityOnDate) didActivityOnDate[dateDone] += 1;
+            }
+            var keys = Object.keys(didActivityOnDate);
+            var didActivity = keys.map(function (v) { return didActivityOnDate[v]; }).reverse();
+            console.log(didActivity)
+
+            // Create the table if it is not already there
+            var table = document.createElement('table');
             table.setAttribute("id", "git table");
 
-            var tableLabel = document.createTextNode('In the past ' + numDays + ' days:')
-            document.getElementById('git table label place').appendChild(tableLabel);
+            // Delete old rows if there
+            table.innerHTML = "";
 
-        }
+            // Get the appropriate color
+            var completedColor = "green";
+            if (this.props.user.activityTypes[activityIndex].color) completedColor = this.props.user.activityTypes[activityIndex].color;
 
-        // Delete old rows if there
-        table.innerHTML = "";
-
-        // Get the appropriate color
-        var completedColor = "green";
-        for (var i = 0; i < this.props.user.activityTypes.length; i++) {
-            console.log(this.props.user.activityTypes[i].name, this.state.activitySelected)
-            if (this.props.user.activityTypes[i].name == this.state.activitySelected) completedColor = this.props.user.activityTypes[i].color
-        }
-
-        console.log(this.props.user.activityTypes);
-
-        for (var i = 0; i < 1; i++) {
             var tr = document.createElement('tr');
+
+            var activityDiv = document.createElement('div');
+            activityDiv.style.backgroundColor = this.props.user.activityTypes[activityIndex].color + 'aa';
+            activityDiv.style.borderRadius = '0.5em';
+            activityDiv.style.width = '150px';
+            activityDiv.style.paddingLeft = '10px';
+            var activityLabel = document.createTextNode(this.props.user.activityTypes[activityIndex].name);
+            var td1 = document.createElement('td');
+            activityDiv.appendChild(activityLabel);
+            td1.appendChild(activityDiv);
+            tr.append(td1);
+
             for (var j = 0; j < numDays; j++) {
                 var td1 = document.createElement('td');
                 var border = document.createElement('div');
                 border.style.padding = '10px';
                 var square = document.createElement('div');
                 square.style.backgroundColor = (didActivity[j] > 0) ? completedColor : "#DCDCDC";
-                square.style.width = '10px';
-                square.style.height = '10px';
+                square.style.width = '15px';
+                square.style.height = '15px';
+
+
                 td1.appendChild(border);
                 border.appendChild(square);
                 tr.appendChild(td1);
 
             }
             table.appendChild(tr);
-        }
 
-        document.getElementById('git table place').appendChild(table);
+
+            document.getElementById('git table place').appendChild(table);
+        }
 
     }
 
 
     render() {
-        const mystyle = {
-            height: "50px",
-            width: "50px",
-            backgroundColor: "#555",
-        }
-
-        console.log(this.props.activities)
-        const { activity } = this.state;
-        const spanStyle = { padding: "20px", paddingTop: "20px" };
+        if (this.state.hasPreviouslyRendered) this.createTable();
+        this.state.hasPreviouslyRendered = true;
         return (
 
             <div className="mt-4 mb-4" >
-                <h2> Git View</h2>
+                <h4> Git View</h4>
                 <div id="git table label place"></div>
 
-                <select
+                {/* <select
                     style={{ width: 300, height: 30 }}
                     onChange={this.onChange}
                     name='activity'
@@ -129,7 +134,7 @@ export class GitView extends Component {
                         return <option key={key} value={e.value} style={{ backgroundColor: "#FF0000" }}>{e.name}</option>;
                     })}
 
-                </select>
+                </select> */}
 
                 <div id="git table place"></div>
             </div >

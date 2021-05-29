@@ -43,7 +43,7 @@ export class History extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {this.props.activities.map(activity => (
+                        {this.props.activities.slice(0).reverse().map(activity => (
                             <tr key={activity.id} style={{ backgroundColor: this.props.user.colorScheme ? this.props.user.colorScheme[activity.activity] : "white" }}>
                                 <td>{activity.activity}</td>
                                 <td>{activity.duration_mins}</td>
