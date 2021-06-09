@@ -29,9 +29,27 @@ export class GitView extends Component {
         this.createTable();
     }
 
-    displayNotes() {
-        alert('hovering over');
+
+    displayNotes(notes) {
+        return function () {
+            for (var i = 0; i < notes.length; i++) {
+                var notesDiv = document.getElementById(notes[i]);
+                notesDiv.style.visibility = 'visible';
+            }
+
+        };
     }
+
+    hideNotes(notes) {
+        return function () {
+            for (var i = 0; i < notes.length; i++) {
+                var notesDiv = document.getElementById(notes[i]);
+                notesDiv.style.visibility = 'hidden';
+            }
+
+        };
+    }
+
 
     createTable() {
 
@@ -51,20 +69,25 @@ export class GitView extends Component {
             for (var i = 0; i < numDays; i++) {
                 var previously = new Date();
                 previously.setDate(today.getDate() - i);
-                didActivityOnDate[previously.toISOString().slice(0, 10)] = 0;
+                didActivityOnDate[previously.toISOString().slice(0, 10)] = { "numDone": 0, "notes": [] };
             }
 
             // Get an array of whether you did the activity on a specific date
             var filteredActivities = this.props.activities.filter(activity => activity.activity == this.props.user.activityTypes[activityIndex].name)
             for (var i = 0; i < filteredActivities.length; i++) {
                 var dateDone = filteredActivities[i].begin_time.slice(0, 10);
-                if (dateDone in didActivityOnDate) didActivityOnDate[dateDone] += 1;
+                if (dateDone in didActivityOnDate) {
+                    didActivityOnDate[dateDone].numDone += 1 + '';
+                    didActivityOnDate[dateDone].notes.push(filteredActivities[i].duration_mins);
+                    if (filteredActivities[i].notes && filteredActivities[i].notes != " ") didActivityOnDate[dateDone].notes[didActivityOnDate[dateDone].notes.length - 1] += ' - ' + filteredActivities[i].notes;
+                }
             }
-            var keys = Object.keys(didActivityOnDate);
-            var didActivity = keys.map(function (v) { return didActivityOnDate[v]; }).reverse();
-            console.log(didActivity)
 
+            var keys = Object.keys(didActivityOnDate);
+            var didActivity = keys.map(function (v) { return didActivityOnDate[v].numDone }).reverse();
+            var notes = keys.map(function (v) { return didActivityOnDate[v].notes }).reverse();
             // Create the table if it is not already there
+            console.log('notes', notes);
             var table = document.createElement('table');
             table.setAttribute("id", "git table");
 
@@ -88,6 +111,7 @@ export class GitView extends Component {
             td1.appendChild(activityDiv);
             tr.append(td1);
 
+
             for (var j = 0; j < numDays; j++) {
                 var td1 = document.createElement('td');
                 var border = document.createElement('div');
@@ -97,6 +121,40 @@ export class GitView extends Component {
                 square.style.width = '15px';
                 square.style.height = '15px';
 
+
+                var notesPlacer = document.createElement('div');
+                notesPlacer.style.position = 'relative';
+                var noteIds = [];
+
+                if (notes[j] && notes[j].length > 0)
+                    for (var k = 0; k < notes[j].length; k++) {
+                        var notesText = document.createElement('div');
+                        notesText.style.fontSize = '70%';
+                        notesText.appendChild(document.createTextNode(notes[j][k]));
+                        var notesDiv = document.createElement('div');
+                        notesDiv.appendChild(notesText);
+                        //notesText.style.maxWidth = '90px';
+                        notesText.style.minWidth = '30px';
+                        notesText.style.display = 'block';
+                        notesText.style.width = notes[j][k].length + 'ch';
+
+                        notesText.id = 'notes div ' + activityIndex + j + k;
+                        notesText.style.backgroundColor = "#D3D3D3"; // Transparent
+                        notesText.style.position = "relative";
+                        notesText.style.zIndex = '2';
+                        notesText.style.visibility = 'hidden';
+                        notesText.style.borderRadius = '0.5em';
+                        notesText.style.padding = '1px';
+                        notesText.style.paddingLeft = '8px';
+                        notesText.style.paddingRight = '8px';
+
+                        noteIds.push(notesText.id);
+                        notesPlacer.append(notesText);
+                    }
+
+                square.appendChild(notesPlacer);
+                square.onmouseover = this.displayNotes(noteIds);
+                square.onmouseout = this.hideNotes(noteIds);
 
                 td1.appendChild(border);
                 border.appendChild(square);
@@ -120,22 +178,6 @@ export class GitView extends Component {
             <div className="mt-4 mb-4" >
                 <h4> Git View</h4>
                 <div id="git table label place"></div>
-
-                {/* <select
-                    style={{ width: 300, height: 30 }}
-                    onChange={this.onChange}
-                    name='activity'
-                    value={activity}>
-                    <option select="selected">
-                        Select Option
-                    </option>
-
-                    {this.props.user.activityTypes.map((e, key) => {
-                        return <option key={key} value={e.value} style={{ backgroundColor: "#FF0000" }}>{e.name}</option>;
-                    })}
-
-                </select> */}
-
                 <div id="git table place"></div>
             </div >
 

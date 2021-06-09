@@ -87,32 +87,48 @@ export class Activities extends Component {
         metaTr.style.verticalAlign = 'top';
 
         for (var date in activitiesByDate) {
-            console.log('running', date, activitiesByDate[date]);
+
             var dayTable = document.createElement('table');
             var dayTh = document.createElement('th');
             var dateText = document.createTextNode(date.slice(5, date.length));
-            dayTh.appendChild(dateText);
+            var dateDiv = document.createElement('div');
+            dateDiv.style.width = '300px';
+            dateDiv.style.height = '40px';
+            dateDiv.style.backgroundColor = 'white';
+
+            dateDiv.style.position = "absolute";
+            dateDiv.appendChild(dateText);
+            dateDiv.style.marginTop = '-30px';
+            dayTh.appendChild(dateDiv);
+
             dayTable.appendChild(dayTh);
             dayTable.style.borderCollapse = 'separate';
             dayTable.style.borderSpacing = '10px';
+            dayTable.style.borderSpacingTop = '0px';
+            dayTable.style.margin = '0px;'
+            dayTable.style.height = '300px';
+            dayTable.style.overflow = 'auto';
+            dayTable.style.display = 'inline-block';
+            dayTable.style.marginTop = '20px';
 
             for (var i = 0; i < activitiesByDate[date].length; i++) {
 
                 index += 1;
 
                 var dayTdDiv = document.createElement('div');
+                dayTdDiv.style.minWidth = '95px';
 
                 var dayTr = document.createElement('tr')
 
                 dayTr.style.backgroundColor = this.props.user.colorScheme[activitiesByDate[date][i].activity];
-                var activityType = document.createTextNode(activitiesByDate[date][i].activity);
+                dayTr.style.fontSize = '80%';
+
+                var strLength = 15;
+                var activityName = activitiesByDate[date][i].activity.length < strLength ? activitiesByDate[date][i].activity : activitiesByDate[date][i].activity.substring(0, strLength - 1) + '...';
+                var activityType = document.createTextNode(activityName);
                 var duration = document.createTextNode(activitiesByDate[date][i].duration_mins);
                 var dayTd1 = document.createElement('td');
                 var dayTd2 = document.createElement('td');
-
-
-                // <div id="parent"> <!-- This is the main container, to mouse over -->
-                // <div id="popup" style="display: none">description text here</div>
 
                 dayTdDiv.append(activityType);
                 dayTd2.append(duration);
@@ -120,12 +136,18 @@ export class Activities extends Component {
                 var notesDiv = document.createElement('div')
 
                 // Show notes
-                if (activitiesByDate[date][i].notes && activitiesByDate[date][i].notes != ' ') {
+                var notes = activitiesByDate[date][i].notes;
+                if (notes && notes != ' ') {
 
-                    var notesText = document.createElement('span');
+                    var notesText = document.createElement('div');
                     notesText.style.fontSize = '70%';
-                    notesText.appendChild(document.createTextNode(activitiesByDate[date][i].notes));
+                    notesText.appendChild(document.createTextNode(notes));
                     notesDiv.appendChild(notesText);
+                    notesText.style.maxWidth = '90px';
+                    notesText.style.display = 'block';
+                    var notesWidth = 10;
+                    notesText.style.width = notes.length < notesWidth ? undefined : notes.length * 0.9 + 'ch';
+
 
                     notesDiv.id = 'notes div ' + index;
                     notesDiv.style.backgroundColor = "#D3D3D3"; // Transparent
@@ -139,10 +161,17 @@ export class Activities extends Component {
                     notesDiv.style.marginLeft = '50px';
                     notesDiv.style.marginTop = '-10px';
 
+                    //notesDiv.style.maxWidth = '200px';
+
                     dayTdDiv.onmouseover = this.displayNotes(notesDiv.id);
                     dayTdDiv.onmouseout = this.hideNotes(notesDiv.id);
 
-                    dayTdDiv.appendChild(notesDiv);
+                    //dayTdDiv.appendChild(notesDiv);
+
+                    var notesPlacer = document.createElement('div');
+                    notesPlacer.style.position = 'relative';
+                    notesPlacer.appendChild(notesDiv);
+                    dayTdDiv.appendChild(notesPlacer);
                 }
 
 
@@ -206,23 +235,8 @@ export class Activities extends Component {
 
             <Fragment>
 
-                <table>
-                    <tr style={{ 'verticalAlign': 'top' }}>
-                        <td>
-                            <div style={{ "width": '500px' }}>
-                                <AddActivity user={this.props.user} putUser={this.props.putUser} addActivity={this.props.addActivity} />
-                            </div>
-                        </td>
-                        <td>
-                            <div style={{ "width": '250px' }}></div>
-                        </td>
-                        <td>
-                            <div style={{ "width": '500px' }}>
-                                <BeginTimer user={this.props.user} />
-                            </div>
-                        </td>
-                    </tr>
-                </table>
+                <AddActivity user={this.props.user} putUser={this.props.putUser} addActivity={this.props.addActivity} />
+
 
                 <hr></hr>
                 <div id="meta-activity-by-date-div"></div>

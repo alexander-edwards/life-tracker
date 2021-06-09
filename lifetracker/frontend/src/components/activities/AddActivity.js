@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { addActivity, putUser, getUser, parseUser } from '../../actions/activities'
 import { getColors, formatTime } from '../../utils/utils'
+import { BeginTimer } from './BeginTimer';
+import '../css/tab.css';
 
 export class AddActivity extends Component {
 
@@ -71,50 +73,89 @@ export class AddActivity extends Component {
 
     }
 
+    openTab(tabID) {
+
+        // Declare all variables
+        var i, tabcontent, tablinks, wasOpen;
+        wasOpen = document.getElementById(tabID).style.display == "block";
+
+        // Get all elements with class="tabcontent" and hide them
+        tabcontent = document.getElementsByClassName("tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+
+        // Get all elements with class="tablinks" and remove the class "active"
+        tablinks = document.getElementsByClassName("tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+
+        // Show the current tab, and add an "active" class to the button that opened the tab
+        if (!wasOpen) document.getElementById(tabID).style.display = "block";
+    }
+
+
     render() {
         const { activity, duration_mins, notes } = this.state;
         return (
 
             <div className="mt-4 mb-4">
-                <h4> Log activity</h4>
-                <form id="add-activity-form" onSubmit={this.onSubmit}>
-                    <div className="form-group mb-2">
-                        <label>Activity</label>
-                        <input
-                            className="form-control"
-                            type="text"
-                            name="activity"
-                            onChange={this.onChange}
-                            value={activity}
-                        />
-                    </div>
 
-                    <div className="form-group mb-2">
-                        <label>Notes</label>
-                        <input
-                            className="form-control"
-                            type="text"
-                            name="notes"
-                            onChange={this.onChange}
-                            value={notes} />
-                    </div>
+                <div class="tab">
+                    <button className="tablinks" onClick={this.openTab.bind(this, 'add-activity')}>Log Activity</button>
+                    <button className="tablinks" onClick={this.openTab.bind(this, 'timer')}>Begin Timer</button>
+                </div>
 
-                    <div className="form-group mb-2">
-                        <label>Duration</label>
-                        <input
-                            className="form-control"
-                            type="text"
-                            name="duration_mins"
-                            onChange={this.onChange}
-                            value={duration_mins} />
-                    </div>
+                <div id='timer' class="tabcontent">
+                    <BeginTimer user={this.props.user} />
+                </div>
 
-                    <div className="form-group mb-2">
-                        <button type="submit" className="btn btn-primary">
-                            Submit
+                <div id="add-activity" class="tabcontent" >
+
+                    <form id="add-activity-form" onSubmit={this.onSubmit}>
+                        <div className="form-group mb-2">
+                            <label>Activity</label>
+                            <input
+                                className="form-control"
+                                type="text"
+                                name="activity"
+                                onChange={this.onChange}
+                                value={activity}
+                            />
+                        </div>
+
+                        <div className="form-group mb-2">
+                            <label>Notes</label>
+                            <input
+                                className="form-control"
+                                type="text"
+                                name="notes"
+                                onChange={this.onChange}
+                                value={notes} />
+                        </div>
+
+                        <div>
+
+                            <div className="form-group mb-2 inlineRow cf">
+                                <label>Duration</label>
+                                <input
+                                    className="form-control"
+                                    type="text"
+                                    name="duration_mins"
+                                    onChange={this.onChange}
+                                    value={duration_mins} />
+                            </div>
+                        </div>
+
+
+                        <div className="form-group mb-2">
+                            <button type="submit" className="btn btn-primary">
+                                Submit
                         </button>
-                    </div>
-                </form>
+                        </div>
+                    </form>
+                </div>
             </div>
 
         )

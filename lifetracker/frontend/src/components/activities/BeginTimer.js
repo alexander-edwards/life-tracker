@@ -101,67 +101,63 @@ export class BeginTimer extends Component {
     render() {
 
         const { activity, notes } = this.state;
-        const spanStyle = { padding: "20px", };
         console.log('color scheme', this.props.user.colorScheme)
         return (
 
-            <div className="mt-4 mb-4" >
-                <h4> Begin activity</h4>
-                <form id='begin-form' className="form-inline" onSubmit={this.onSubmit}>
+
+            <form id='begin-form' className="form-inline" onSubmit={this.onSubmit}>
 
 
-                    <div className="form-group mb-2">
-                        <label>Start your activity</label>
-                        <select
-                            className="form-control"
-                            //style={{ width: 500, height: 50 }}
-                            onChange={this.onChange}
-                            name='activity'
-                            value={activity}>
-                            <option select="selected">
-                                Select Option
+                <div className="form-group mb-2">
+                    <label>Activity</label>
+                    <select
+                        className="form-control"
+                        onChange={this.onChange}
+                        name='activity'
+                        value={activity}>
+                        <option select="selected">
+                            Select Option
                             </option>
 
-                            {Array.from(this.props.user.activityTypes).map((e, key) => {
-                                return <option key={key} value={e.value} style={{ "backgroundColor": 'color:red' }}>{e.name}</option>;
-                            })}
+                        {Array.from(this.props.user.activityTypes).map((e, key) => {
+                            return <option key={key} value={e.value} style={{ "backgroundColor": 'color:red' }}>{e.name}</option>;
+                        })}
 
-                        </select>
-                    </div>
+                    </select>
+                </div>
 
-                    <div className="form-group mb-2">
-                        <label>Notes</label>
-                        <input
-                            className="form-control"
-                            type="text"
-                            name="notes"
-                            onChange={this.onChange}
-                            value={notes} />
-                    </div>
+                <div className="form-group mb-2">
+                    <label>Notes</label>
+                    <input
+                        className="form-control"
+                        type="text"
+                        name="notes"
+                        onChange={this.onChange}
+                        value={notes} />
+                </div>
 
-                    <div className="form-group mb-2" style={{ "paddingTop": "25px", "paddingLeft": "5px" }}>
-
-
-                        <h4>Timer: {this.formatTime(this.state.seconds)}</h4>
-                    </div>
+                <div className="form-group mb-2" style={{ "paddingTop": "15px", "paddingLeft": "5px", "paddingBottom": "9px" }}>
 
 
-                    <div className="form-group mb-2" style={{ "paddingTop": "5px", "paddingLeft": "5px" }}>
+                    <h4>Timer: {this.formatTime(this.state.seconds)}</h4>
+                </div>
 
 
-                        <button onClick={this.start} type="start" className="btn btn-primary" >
-                            Start
+                <div className="form-group mb-2" style={{ "paddingTop": "2px", "paddingLeft": "5px" }}>
+
+
+                    <button onClick={this.start} type="start" className="btn btn-primary" >
+                        Start
                         </button>
 
-                        <button onClick={this.end} type="end" className="btn btn-primary" style={{ 'marginLeft': "10px" }}>
-                            End
+                    <button onClick={this.end} type="end" className="btn btn-primary" style={{ 'marginLeft': "10px" }}>
+                        End
                         </button>
-                    </div>
+                </div>
 
 
-                </form>
+            </form>
 
-            </div >
 
         )
     }
