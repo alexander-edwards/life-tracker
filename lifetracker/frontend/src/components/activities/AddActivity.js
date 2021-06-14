@@ -24,35 +24,40 @@ export class AddActivity extends Component {
 
     constructor(props) {
         super(props);
+
+    }
+
+    componentDidMount() {
+
+        var date = new Date();
+        var isoDateTime = new Date(date.getTime() - (date.getTimezoneOffset() * 60000)).toISOString();
+        console.log(isoDateTime);
+        this.setState({ begin_time: isoDateTime.slice(0, 16) })
     }
 
 
-    onChange = e => this.setState({ [e.target.name]: [e.target.value] });
+    onChange = e => { console.log('changed to', e.target.value); this.setState({ [e.target.name]: e.target.value }); }
 
     onSubmit = e => {
 
         e.preventDefault();
 
-        const { activity, duration_mins, notes } = this.state;
+        const { activity, duration_mins, notes, begin_time } = this.state;
 
-        var current = new Date();
-        console.log('current time', current);
-        console.log(current.toLocaleString());
         const activity_obj = {
-            'activity': activity[0],
-            'duration_mins': duration_mins[0],
-            'begin_time': formatTime(current),
-            'notes': notes[0]
+            'activity': activity,
+            'duration_mins': duration_mins,
+            'begin_time': begin_time,
+            'notes': notes
         };
-
-        console.log('avtivity is', activity_obj);
+        console.log('begin time', begin_time)
         this.props.addActivity(activity_obj);
 
         const user_obj = this.props.user;
 
         // If it is a new activity
         if (!(activity[0] in this.props.user.colorScheme)) {
-            var newActivity = { "name": activity[0], color: "white" };
+            var newActivity = { "name": activity, color: "white" };
             var colors = getColors()
             for (var i = 0; i < colors.length; i++) {
                 if (!(colors[i] in this.props.user.colorToActivity)) {
@@ -60,7 +65,7 @@ export class AddActivity extends Component {
                     break;
                 }
             }
-            user_obj.activity_types[activity[0]] = newActivity;
+            user_obj.activity_types[activity] = newActivity;
             user_obj.activityTypes.push(newActivity);
 
             this.props.putUser(user_obj);
@@ -73,91 +78,76 @@ export class AddActivity extends Component {
 
     }
 
-    openTab(tabID) {
-
-        // Declare all variables
-        var i, tabcontent, tablinks, wasOpen;
-        wasOpen = document.getElementById(tabID).style.display == "block";
-
-        // Get all elements with class="tabcontent" and hide them
-        tabcontent = document.getElementsByClassName("tabcontent");
-        for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].style.display = "none";
-        }
-
-        // Get all elements with class="tablinks" and remove the class "active"
-        tablinks = document.getElementsByClassName("tablinks");
-        for (i = 0; i < tablinks.length; i++) {
-            tablinks[i].className = tablinks[i].className.replace(" active", "");
-        }
-
-        // Show the current tab, and add an "active" class to the button that opened the tab
-        if (!wasOpen) document.getElementById(tabID).style.display = "block";
-    }
-
 
     render() {
-        const { activity, duration_mins, notes } = this.state;
+        const { activity, duration_mins, notes, begin_time } = this.state;
         return (
 
-            <div className="mt-4 mb-4">
 
-                <div class="tab">
-                    <button className="tablinks" onClick={this.openTab.bind(this, 'add-activity')}>Log Activity</button>
-                    <button className="tablinks" onClick={this.openTab.bind(this, 'timer')}>Begin Timer</button>
+            <form id="add-activity-form" onSubmit={this.onSubmit}>
+                <div className="form-group mb-2">
+                    <label>Activity</label>
+                    <input
+                        className="form-control"
+                        type="text"
+                        id='activity'
+                        name="activity"
+                        onChange={this.onChange}
+                        value={activity}
+                    />
                 </div>
 
-                <div id='timer' class="tabcontent">
-                    <BeginTimer user={this.props.user} />
+                <div className="form-group mb-2">
+                    <label>Notes</label>
+                    <input
+                        className="form-control"
+                        type="text"
+                        name="notes"
+                        onChange={this.onChange}
+                        value={notes} />
                 </div>
 
-                <div id="add-activity" class="tabcontent" >
+                <table>
+                    <tr>
+                        <td>
+                            <div>
 
-                    <form id="add-activity-form" onSubmit={this.onSubmit}>
-                        <div className="form-group mb-2">
-                            <label>Activity</label>
-                            <input
-                                className="form-control"
-                                type="text"
-                                name="activity"
-                                onChange={this.onChange}
-                                value={activity}
-                            />
-                        </div>
-
-                        <div className="form-group mb-2">
-                            <label>Notes</label>
-                            <input
-                                className="form-control"
-                                type="text"
-                                name="notes"
-                                onChange={this.onChange}
-                                value={notes} />
-                        </div>
-
-                        <div>
-
-                            <div className="form-group mb-2 inlineRow cf">
-                                <label>Duration</label>
-                                <input
-                                    className="form-control"
-                                    type="text"
-                                    name="duration_mins"
-                                    onChange={this.onChange}
-                                    value={duration_mins} />
+                                <div className="form-group mb-2 inlineRow">
+                                    <label>Duration</label>
+                                    <input
+                                        className="form-control"
+                                        type="text"
+                                        name="duration_mins"
+                                        onChange={this.onChange}
+                                        value={duration_mins} />
+                                </div>
                             </div>
-                        </div>
+                        </td>
+                        <td>
+                            <div>
 
+                                <div className="form-group mb-2 inlineRow">
+                                    <label>Begin Time</label>
+                                    <input
+                                        className="form-control"
+                                        id='date picker'
+                                        type="datetime-local"
+                                        name="begin_time"
+                                        onChange={this.onChange}
+                                        value={begin_time}
+                                    ></input>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
 
-                        <div className="form-group mb-2">
-                            <button type="submit" className="btn btn-primary">
-                                Submit
-                        </button>
-                        </div>
-                    </form>
+                <div className="form-group mb-2" style={{ "paddingLeft": "1px" }} >
+                    <button type="submit" className="btn btn-primary tab-button ">
+                        Submit
+                    </button>
                 </div>
-            </div>
-
+            </form>
         )
     }
 }

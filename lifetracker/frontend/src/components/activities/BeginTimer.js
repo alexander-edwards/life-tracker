@@ -139,11 +139,11 @@ export class BeginTimer extends Component {
                 <div className="form-group mb-2" style={{ "paddingTop": "15px", "paddingLeft": "5px", "paddingBottom": "9px" }}>
 
 
-                    <h4>Timer: {this.formatTime(this.state.seconds)}</h4>
+                    <h4>{this.formatTime(this.state.seconds)}</h4>
                 </div>
 
 
-                <div className="form-group mb-2" style={{ "paddingTop": "2px", "paddingLeft": "5px" }}>
+                <div className="form-group mb-2" style={{ "paddingTop": "4px", "paddingLeft": "1px" }}>
 
 
                     <button onClick={this.start} type="start" className="btn btn-primary" >

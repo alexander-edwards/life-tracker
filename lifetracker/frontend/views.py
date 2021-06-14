@@ -9,3 +9,7 @@ def index(request):
 
 def history(request):
     return render(request, 'frontend/history.html')
+
+
+def user(request):
+    return render(request, 'frontend/user.html')

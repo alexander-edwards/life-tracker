@@ -59,7 +59,7 @@ export const getUserProfile = () => dispatch => {
         .catch(err => console.log(err));
 }
 
-// UPDAATE USER 
+// UPDATE USER 
 export const putUser = (user) => dispatch => {
     console.log('Putting user profile', user);
     var id = 1
@@ -67,7 +67,7 @@ export const putUser = (user) => dispatch => {
         .then(res => {
             dispatch({
                 type: PUT_USER,
-                payload: res.data
+                payload: user// might need to be res.data
             });
         })
         .catch(err => console.log(err));

@@ -2,11 +2,10 @@ import React, { Component, Fragment } from 'react';
 import ReactDOM from 'react-dom';
 
 import Header from './layout/Header';
-import Activities from './activities/Activities';
+import User from './activities/User';
 
 import { Provider } from 'react-redux';
 import store from '../store';
-
 
 class App extends Component {
     render() {
@@ -14,7 +13,7 @@ class App extends Component {
             <Provider store={store}>
                 <Header />
                 <div className="container">
-                    <Activities />
+                    <User />
                 </div>
 
             </Provider>

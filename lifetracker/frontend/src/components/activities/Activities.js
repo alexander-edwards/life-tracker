@@ -4,7 +4,11 @@ import PropTypes from 'prop-types';
 import { getActivities, deleteActivity, getUserProfile, addActivity, putUser } from '../../actions/activities'
 import { GitView } from './GitView';
 import { AddActivity } from './AddActivity';
+import { Daily } from './Daily'
+import '../css/tab.css'
 
+import Tab from 'react-bootstrap/Tab'
+import Tabs from 'react-bootstrap/Tabs'
 
 import BeginTimer from './BeginTimer';
 
@@ -90,7 +94,8 @@ export class Activities extends Component {
 
             var dayTable = document.createElement('table');
             var dayTh = document.createElement('th');
-            var dateText = document.createTextNode(date.slice(5, date.length));
+            var dateText = document.createTextNode(new Date(date).toUTCString().slice(0, 7));
+
             var dateDiv = document.createElement('div');
             dateDiv.style.width = '300px';
             dateDiv.style.height = '40px';
@@ -193,11 +198,18 @@ export class Activities extends Component {
 
                 var dayTr = document.createElement('tr')
                 dayTr.style.backgroundColor = '#D3D3D3';
-                var activityType = document.createTextNode('No activity');
+                dayTr.style.fontSize = '80%';
+
+                var noActivityDiv = document.createElement('div');
+                noActivityDiv.appendChild(document.createTextNode('No activity'));
+
+                noActivityDiv.style.maxWidth = '90px';
+                noActivityDiv.style.display = 'block';
+
                 var duration = document.createTextNode(0);
                 var dayTd1 = document.createElement('td');
                 var dayTd2 = document.createElement('td');
-                dayTd1.append(activityType);
+                dayTd1.append(noActivityDiv);
                 dayTd2.append(duration);
                 dayTd1.style.padding = '10px';
                 dayTd2.style.padding = '10px';
@@ -235,7 +247,26 @@ export class Activities extends Component {
 
             <Fragment>
 
-                <AddActivity user={this.props.user} putUser={this.props.putUser} addActivity={this.props.addActivity} />
+                <table className='upper-table'>
+                    <tr>
+                        <td>
+                            <div className="mt-4 mb-4">
+                                <Tabs className="input-tab">
+                                    <Tab className='input-tab-content' eventKey="add-activity" title="Add Activity">
+                                        <AddActivity user={this.props.user} putUser={this.props.putUser} addActivity={this.props.addActivity} />
+                                    </Tab>
+                                    <Tab className='input-tab-content' eventKey="begin-timer" title="Begin Timer">
+                                        <BeginTimer user={this.props.user} />
+                                    </Tab>
+                                </Tabs>
+                            </div>
+                        </td>
+                        <td>
+                            <Daily />
+                        </td>
+                    </tr>
+                </table>
+
 
 
                 <hr></hr>

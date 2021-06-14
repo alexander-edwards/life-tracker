@@ -19,7 +19,6 @@ export class GitView extends Component {
 
     }
     onChange = e => {
-        console.log(e.target.value);
         this.setState({ activitySelected: e.target.value }, function () {
             this.createTable();
         });
@@ -87,7 +86,7 @@ export class GitView extends Component {
             var didActivity = keys.map(function (v) { return didActivityOnDate[v].numDone }).reverse();
             var notes = keys.map(function (v) { return didActivityOnDate[v].notes }).reverse();
             // Create the table if it is not already there
-            console.log('notes', notes);
+
             var table = document.createElement('table');
             table.setAttribute("id", "git table");
 

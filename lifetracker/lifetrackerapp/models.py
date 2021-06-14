@@ -17,3 +17,11 @@ class UserInstance(models.Model):
     name = models.CharField(max_length=30)
     password = models.CharField(max_length=30)
     activity_types = models.JSONField()
+    bin_activity_types = models.JSONField()
+
+
+class DayInstance(models.Model):
+
+    date = models.DateTimeField()
+    notes = models.CharField(max_length=10000, null=True, blank=True)
+    bin_activities_done = models.JSONField()

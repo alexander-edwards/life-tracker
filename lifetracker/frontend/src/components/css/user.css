@@ -1,0 +1,14 @@
+.user-nav-row { 
+    padding: 20px;   
+}
+
+
+.tab-button { 
+    background-color: #DCDCDC !important;
+    border-color: #DCDCDC ; 
+}
+
+
+.tab-button:hover { 
+    background-color: grey !important;
+}

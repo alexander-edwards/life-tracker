@@ -1,4 +1,4 @@
-import { DELETE_ACTIVITY, GET_ACTIVITIES, ADD_ACTIVITY, GET_USER } from '../actions/types';
+import { DELETE_ACTIVITY, GET_ACTIVITIES, ADD_ACTIVITY, GET_USER, PUT_USER } from '../actions/types';
 
 const initialState = {
     activities: [],
@@ -18,13 +18,16 @@ export default function (state = initialState, action) {
                 activities: state.activities.filter(activity => activity.id !== action.payload)
             }
         case ADD_ACTIVITY:
-            console.log(action.payload);
             return {
                 ...state,
                 activities: [...state.activities, action.payload]
             }
         case GET_USER:
-            console.log(action.payload);
+            return {
+                ...state,
+                user: action.payload
+            }
+        case PUT_USER:
             return {
                 ...state,
                 user: action.payload

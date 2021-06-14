@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from lifetrackerapp.models import ActivityInstance, UserInstance
+from lifetrackerapp.models import ActivityInstance, UserInstance, DayInstance
 
 
 class ActivityInstanceSerializer(serializers.ModelSerializer):
@@ -11,4 +11,10 @@ class ActivityInstanceSerializer(serializers.ModelSerializer):
 class UserInstanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserInstance
+        fields = '__all__'
+
+
+class DayInstanceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DayInstance
         fields = '__all__'

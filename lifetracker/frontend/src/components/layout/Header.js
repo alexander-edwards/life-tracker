@@ -15,7 +15,7 @@ export class Header extends Component {
                                 <a className="nav-link active" aria-current="page" href="#">Home</a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="#">Profile</a>
+                                <a className="nav-link" href="user">Profile</a>
                             </li>
                             <li className="nav-item">
                                 <a className="nav-link" href="history">History</a>

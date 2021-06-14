@@ -3,12 +3,10 @@ import { connect } from 'react-redux';
 import { getActivities, deleteActivity, getUserProfile } from '../../actions/activities'
 import PropTypes from 'prop-types';
 
-import { Provider } from 'react-redux';
 
 export class History extends Component {
 
     constructor(props) {
-        console.log('here');
         super(props);
     }
 
@@ -27,7 +25,6 @@ export class History extends Component {
     }
 
     render() {
-        console.log('rendered');
         return (
 
             <Fragment>
