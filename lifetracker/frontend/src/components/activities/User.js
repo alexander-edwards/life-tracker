@@ -28,12 +28,10 @@ export class History extends Component {
     }
 
     render() {
-        console.log('got this', this.props.user)
         return (
 
             <Fragment>
                 <div style={{ padding: "20px" }}>
-
 
                     <h3> Welcome, {this.props.user.name}</h3>
                 </div>
@@ -52,14 +50,29 @@ export class History extends Component {
                         <Col sm={9}>
                             <Tab.Content>
                                 <Tab.Pane eventKey="first">
-                                    <div>
-                                        {this.props.user.activityTypes.map((activity) => (
-                                            <ActivityType
-                                                user={this.props.user}
-                                                activityType={activity}
-                                            />
-                                        ))}
-                                    </div>
+                                    <table className='activity-table'>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <div>
+                                                        {this.props.user.activityTypes.map((activity) => (
+                                                            <ActivityType
+                                                                user={this.props.user}
+                                                                activity_type={activity}
+                                                            />
+                                                        ))}
+                                                    </div>
+                                                </td>
+                                                <td style={{ verticalAlign: "top" }}>
+                                                    <div style={{ paddingLeft: "100px", position: 'relative' }}>
+                                                        add activity
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+
+                                    </table>
+
                                 </Tab.Pane>
                                 <Tab.Pane eventKey="second">
                                     asdf

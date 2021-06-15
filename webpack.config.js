@@ -21,7 +21,7 @@ module.exports = {
         'user': './lifetracker/frontend/src/user.js',
     },
     output: {
-        path: __dirname + '/lifetracker/frontend/static/frontend2/',
+        path: __dirname + '/lifetracker/frontend/static/frontend3/',
         filename: '[name].js'
     }
 }

@@ -69,7 +69,7 @@ export const putUser = (user) => dispatch => {
                 type: PUT_USER,
                 payload: user// might need to be res.data
             });
-        })
+        }).then(getUserProfile())
         .catch(err => console.log(err));
 
 }

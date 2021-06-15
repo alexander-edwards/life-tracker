@@ -11,75 +11,82 @@ export class ActivityType extends Component {
 
     static propTypes = {
         user: PropTypes.object.isRequired,
-        activityType: PropTypes.object.isRequired,
+        activity_type: PropTypes.object.isRequired,
         putUser: PropTypes.func.isRequired,
     }
 
-    state = {
-        user: JSON.parse(JSON.stringify(this.props.user)),
-        updatedActivityType: JSON.parse(JSON.stringify(this.props.activityType))
+    constructor(props) {
+        super(props);
+        this.state = {
+            user: JSON.parse(JSON.stringify(this.props.user)),
+            updated_activity_type: JSON.parse(JSON.stringify(this.props.activity_type)),
+            id: Math.floor(Math.random() * (100000 - 0 + 1)) + 0
+        }
     }
 
-    componentDidMount() {
-
-        this.state.updatedActivityType = JSON.parse(JSON.stringify(this.props.activityType));
-        this.state.user = JSON.parse(JSON.stringify(this.props.user));
-
-    }
 
     onChange = e => {
 
-        document.getElementById('submit' + this.props.activityType.color).style.display = 'block';
+
+        document.getElementById('submit' + this.props.activity_type.color).style.visibility = 'visible';
 
         this.setState(prevState => {
-            let updatedActivityType = Object.assign({}, prevState.updatedActivityType);  // creating copy of state variable jasper
-            updatedActivityType.color = e.target.value;
-            if (updatedActivityType.color == this.props.activityType.color) {
-                document.getElementById('submit' + this.props.activityType.color).style.display = 'none';
-                console.log('here');
-            }// Returning to no submit if returned to original value  
-            console.log(updatedActivityType.color, this.props.activityType.color)
-            return { updatedActivityType };
+            let updated_activity_type = Object.assign({}, prevState.updated_activity_type);
+            updated_activity_type.color = e.target.value;
+
+            // Returning to no submit if returned to original value  
+            if (updated_activity_type.color == this.props.activity_type.color) {
+                document.getElementById('submit' + this.props.activity_type.color).style.visibility = 'hidden';
+            }
+
+            return { updated_activity_type };
         });
 
     }
 
     onSubmit = e => {
         e.preventDefault();
-        // Replace with updated color/name 
-        for (var i = 0; i < this.state.user.activityTypes.length; i++) {
-            if (this.state.updatedActivityType.value == this.state.user.activityTypes[i].value) {
-                this.state.user.activityTypes[i] = this.state.updatedActivityType;
-            }
+
+        delete this.state.user.activityTypes; // Get rid of add-on object I use to move around array easier
+        this.state.user.activity_types[this.state.updated_activity_type.value] = { "name": this.state.updated_activity_type.name, "color": this.state.updated_activity_type.color };
+        document.getElementById('submit' + this.props.activity_type.color).style.visibility = 'hidden';
+        this.props.putUser(this.state.user);
+        console.log('SUBMITTED');
+    }
+
+    static getDerivedStateFromProps(props, state) {
+        // In case the very first element is updated by the parent after the constructor
+        if (props.activity_type.value != 'default' && state.updated_activity_type.value == 'default') {
+            return {
+                updated_activity_type: JSON.parse(JSON.stringify(props.activity_type)),
+                user: JSON.parse(JSON.stringify(props.user))
+            };
         }
-        document.getElementById('submit' + this.props.activityType.color).style.display = 'none';
-        console.log('thisuser', this.state.user);
-        const user_obj = this.state.user;
-        this.props.putUser(user_obj);
+        return { updated_activity_type: state.updated_activity_type };
     }
 
 
 
-
     render() {
+
+        if (this.state.updated_activity_type.value == 'default') return null;
         return (
             <div style={{ paddingBottom: "10px" }}>
                 <table >
                     <tbody>
                         <tr>
-                            <td style={{ width: '200px' }}>{this.props.activityType.name}</td>
+                            <td style={{ width: '200px' }}>{this.props.activity_type.name}</td>
                             <td>
-
                                 <input
                                     className="form-control"
                                     type="text"
-                                    value={this.state.updatedActivityType.color}
-                                    style={{ color: '#FFFFFF', backgroundColor: this.state.updatedActivityType.color, size: "10" }}
+                                    value={this.state.updated_activity_type.color}
+                                    style={{ color: '#FFFFFF', backgroundColor: this.state.updated_activity_type.color, size: "10" }}
                                     onChange={this.onChange}
                                 />
                             </td>
                             <td>
-                                <div id={'submit' + this.props.activityType.color} className="form-group mb-2" style={{ paddingTop: "8px", paddingLeft: '5px', display: 'none' }} >
+                                <div id={'submit' + this.props.activity_type.color} className="form-group mb-2" style={{ position: "relative", top: "4px", paddingLeft: '5px', visibility: 'hidden' }} >
                                     <button type="submit" onClick={this.onSubmit} className="btn btn-primary tab-button" style={{ backgroundColor: '#DCDCDC' }}>
                                         ✓
                                     </button>
