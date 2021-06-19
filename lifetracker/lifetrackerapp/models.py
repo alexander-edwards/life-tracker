@@ -22,6 +22,6 @@ class UserInstance(models.Model):
 
 class DayInstance(models.Model):
 
-    date = models.DateTimeField()
+    date = models.DateField(primary_key=True)
     notes = models.CharField(max_length=10000, null=True, blank=True)
     bin_activities_done = models.JSONField()

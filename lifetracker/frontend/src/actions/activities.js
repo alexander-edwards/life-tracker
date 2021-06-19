@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { GET_ACTIVITIES, DELETE_ACTIVITY, ADD_ACTIVITY, GET_USER, PUT_USER } from './types';
+import { GET_ACTIVITIES, DELETE_ACTIVITY, ADD_ACTIVITY, GET_USER, PUT_USER, GET_DAYS, PUT_DAY } from './types';
 
 // GET ACTIVITIES 
 export const getActivities = () => dispatch => {
@@ -71,8 +71,33 @@ export const putUser = (user) => dispatch => {
             });
         }).then(getUserProfile())
         .catch(err => console.log(err));
-
 }
+
+export const getDays = () => dispatch => {
+    axios.get('/api/days')
+        .then(res => {
+            console.log('Got days');
+            dispatch({
+                type: GET_DAYS,
+                payload: res.data
+            });
+        })
+        .catch(err => console.log(err));
+}
+
+export const putDay = (day) => dispatch => {
+
+    console.log('Putting day', day);
+    axios.put('/api/days/' + day.date + '/', day)
+        .then(res => {
+            dispatch({
+                type: PUT_DAY,
+                payload: day// might need to be res.data
+            });
+        })
+        .catch(err => console.log(err));
+}
+
 
 export function parseUser(user) {
     var colorScheme = {};
@@ -91,3 +116,4 @@ export function parseUser(user) {
 
     return user;
 }
+

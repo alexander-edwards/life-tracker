@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { getActivities, deleteActivity, getUserProfile, addActivity, putUser } from '../../actions/activities'
+import { getActivities, deleteActivity, getUserProfile, addActivity, putUser, getDays, putDay } from '../../actions/activities'
 import { GitView } from './GitView';
 import { AddActivity } from './AddActivity';
 import { Daily } from './Daily'
@@ -28,13 +28,16 @@ export class Activities extends Component {
         getActivities: PropTypes.func.isRequired,
         deleteActivity: PropTypes.func.isRequired,
         putUser: PropTypes.func.isRequired,
-        addActivity: PropTypes.func.isRequired
+        addActivity: PropTypes.func.isRequired,
+        getDays: PropTypes.func.isRequired,
+        putDay: PropTypes.func.isRequired,
     }
 
     componentDidMount() {
 
         this.props.getUserProfile();
         this.props.getActivities();
+        this.props.getDays();
 
         this.setState({ isInitialised: true })
         console.log('set to true');
@@ -58,6 +61,8 @@ export class Activities extends Component {
     createTable() {
 
         if (this.props.user.activityTypes.length == 1) return;
+
+
         var numDays = 7;
         var activitiesByDate = {}
 
@@ -74,8 +79,6 @@ export class Activities extends Component {
             var dateDone = this.props.activities[i].begin_time.slice(0, 10);
             if (dateDone in activitiesByDate) activitiesByDate[dateDone].push(this.props.activities[i])
         }
-
-        console.log('activities by date', activitiesByDate);
 
         // // Create the table if it is not already there
         var metaTable = document.getElementById('meta-activity-by-date-table')
@@ -241,6 +244,8 @@ export class Activities extends Component {
         if (this.state.isInitialised) {
             this.createTable();
         }
+        console.log(this.props)
+
 
         return (
 
@@ -262,16 +267,13 @@ export class Activities extends Component {
                             </div>
                         </td>
                         <td>
-                            <Daily />
+                            <Daily putDay={this.props.putDay} user={this.props.user} putUser={this.props.putUser} />
                         </td>
                     </tr>
                 </table>
 
-
-
                 <hr></hr>
                 <div id="meta-activity-by-date-div"></div>
-
 
                 <hr></hr>
 
@@ -289,10 +291,11 @@ function mapStateToProps(state) {
     if (state.activities.user.activityTypes) newUser = state.activities.user;
     return {
         activities: state.activities.activities,
-        user: newUser
+        user: newUser,
+        days: state.activities.days,
     };
 }
 
 
 
-export default connect(mapStateToProps, { getActivities, deleteActivity, getUserProfile, addActivity, putUser })(Activities);
+export default connect(mapStateToProps, { getActivities, deleteActivity, getUserProfile, addActivity, putUser, getDays, putDay })(Activities);

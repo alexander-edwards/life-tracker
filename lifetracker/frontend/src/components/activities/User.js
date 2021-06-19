@@ -2,10 +2,11 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { getActivities, deleteActivity, getUserProfile } from '../../actions/activities'
 import ActivityType from './ActivityType';
+import BinActivityType from './BinActivityType';
 import PropTypes from 'prop-types';
 import '../css/user.css'
 
-import { Col, Nav, Row, Tab, Tabs } from 'react-bootstrap'
+import { Col, Nav, Row, Tab } from 'react-bootstrap'
 
 export class History extends Component {
 
@@ -43,7 +44,7 @@ export class History extends Component {
                                     <Nav.Link eventKey="first">Activity Types</Nav.Link>
                                 </Nav.Item>
                                 <Nav.Item>
-                                    <Nav.Link eventKey="second">Tab 2</Nav.Link>
+                                    <Nav.Link eventKey="second">Daily Binary Activities</Nav.Link>
                                 </Nav.Item>
                             </Nav>
                         </Col>
@@ -75,7 +76,7 @@ export class History extends Component {
 
                                 </Tab.Pane>
                                 <Tab.Pane eventKey="second">
-                                    asdf
+                                    <BinActivityType user={this.props.user} />
                                 </Tab.Pane>
                             </Tab.Content>
                         </Col>

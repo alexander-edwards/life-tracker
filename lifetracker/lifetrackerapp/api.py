@@ -27,3 +27,12 @@ class DayInstanceViewSet(viewsets.ModelViewSet):
         permissions.AllowAny
     ]
     serializer_class = DayInstanceSerializer
+
+    def get_object(self):
+        if self.request.method == 'PUT':
+            obj, created = DayInstance.objects.get_or_create(
+                pk=self.kwargs.get('pk'),
+                bin_activities_done=[])
+            return obj
+        else:
+            return super(DayInstanceViewSet, self).get_object()

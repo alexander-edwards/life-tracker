@@ -1,8 +1,9 @@
-import { DELETE_ACTIVITY, GET_ACTIVITIES, ADD_ACTIVITY, GET_USER, PUT_USER } from '../actions/types';
+import { DELETE_ACTIVITY, GET_ACTIVITIES, ADD_ACTIVITY, GET_USER, PUT_USER, GET_DAYS, PUT_DAY } from '../actions/types';
 
 const initialState = {
     activities: [],
-    user: {}
+    user: {},
+    days: []
 };
 
 export default function (state = initialState, action) {
@@ -31,6 +32,16 @@ export default function (state = initialState, action) {
             return {
                 ...state,
                 user: action.payload
+            }
+        case GET_DAYS:
+            return {
+                ...state,
+                days: action.payload
+            }
+        case PUT_DAY:
+            return {
+                ...state,
+                day: action.payload
             }
         default:
             return state;

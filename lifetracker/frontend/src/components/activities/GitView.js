@@ -100,7 +100,7 @@ export class GitView extends Component {
             var tr = document.createElement('tr');
 
             var activityDiv = document.createElement('div');
-            activityDiv.style.backgroundColor = this.props.user.activityTypes[activityIndex].color + 'aa';
+            activityDiv.style.backgroundColor = (this.props.user.activityTypes[activityIndex].color + 'aa').slice(0, 9);
             activityDiv.style.borderRadius = '0.5em';
             activityDiv.style.width = '150px';
             activityDiv.style.paddingLeft = '10px';

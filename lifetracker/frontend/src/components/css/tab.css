@@ -39,7 +39,7 @@
 
 
 .right-table { 
-  top: 16px; 
+  top: -10px; 
   position: relative;
   width: 100%;
   table-layout: fixed;
@@ -49,8 +49,7 @@
 
 
 .post-it { 
-  max-height: 50%;
-  height: 108px;
+  height: 260px;
   border: 1px; 
   border-color: #DCDCDC;
   border-style: solid; 
